@@ -1,6 +1,11 @@
 require('dotenv').config();
 const { Client } = require('discord.js');
-const { pontoEventMessage, pontoInicioMessage } = require('./src/events/ponto');
+
+const {
+	pontoEventMessage,
+	pontoInicioMessage,
+	pontoFimMessage,
+} = require('./src/events/ponto');
 const { connectDB } = require('./src/database/connection');
 
 const client = new Client();
@@ -30,7 +35,7 @@ client.on('message', (message) => {
 	}
 
 	if (message.content === '!ponto fim') {
-		message.reply('dale');
+		pontoFimMessage(message);
 	}
 
 	return;

@@ -1,4 +1,5 @@
-const db = [];
+const Moment = require('moment');
+const Ponto = require('../database/models/Ponto');
 
 exports.pontoEventMessage = function (message) {
 	message.channel.send(`
@@ -6,14 +7,28 @@ exports.pontoEventMessage = function (message) {
   🕒 !ponto inicio
   ⌛ !ponto fim
   `);
+
+	const moment = Moment();
+
+	console.log(moment.date());
+	console.log(moment.hour(0).toDate());
+	// console.log(moment.hour(0));
 };
 
-exports.pontoInicioMessage = function (message) {
+exports.pontoInicioMessage = async function (message) {
 	const conectado = message.member.voice?.channel?.name.startsWith('work');
 
 	if (conectado) {
 		// Checar se jornada já foi iniciado
-		if (db.findIndex((i) => i.id === message.author?.id) !== -1) {
+		const pontoExistente = await Ponto.findOne({
+			status: 1,
+			usuarioId: message.author.id,
+			dataInicio: {
+				$gt: Moment().hour(0).toDate(),
+			},
+		}).lean();
+
+		if (pontoExistente) {
 			message.reply('Sua jornada de trabalho já foi iniciada.');
 
 			return;
@@ -25,11 +40,39 @@ exports.pontoInicioMessage = function (message) {
 		);
 
 		// Salvar status no DB
-		db.push({
-			id: message.author?.id,
-			startDate: message.createdAt,
+
+		await Ponto.create({
+			status: 1,
+			usuarioId: message.author.id,
+			dataInicio: Date.now(),
 		});
+
+		return;
 	} else {
 		message.reply('Você precisa estar conectado a algum canal de trabalho.');
+	}
+};
+
+exports.pontoFimMessage = async function (message) {
+	const pontoExistente = await Ponto.findOne({
+		status: 1,
+		usuarioId: message.author.id,
+		dataInicio: {
+			$gt: Moment().hour(0).toDate(),
+		},
+	}).lean();
+
+	if (!pontoExistente) {
+		message.reply('Sua jornada de trabalho não foi iniciada ainda hoje');
+
+		return;
+	} else {
+		await Ponto.findOneAndUpdate(
+			{ _id: pontoExistente._id },
+			{ status: 0, dataFim: Date.now() }
+		);
+
+		message.reply('Ponto Batido! Jornada de trabalho finalizada');
+		return;
 	}
 };

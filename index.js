@@ -5,6 +5,7 @@ const {
 	pontoEventMessage,
 	pontoInicioMessage,
 	pontoFimMessage,
+	statusUsuario,
 } = require('./src/events/ponto');
 const { connectDB } = require('./src/database/connection');
 
@@ -21,14 +22,12 @@ client.on('message', (message) => {
 		message.channel.send('sinto uma coisa diferente');
 	}
 
-	if (message.content.startsWith('!db')) {
-		message.reply(JSON.stringify(db));
+	if (message.content === '!status') {
+		statusUsuario(message);
 	}
 
 	if (message.content === '!ponto') {
 		pontoEventMessage(message);
-
-		console.log(message.member.user);
 	}
 
 	// !ponto

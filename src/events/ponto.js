@@ -7,12 +7,6 @@ exports.pontoEventMessage = function (message) {
   🕒 !ponto inicio
   ⌛ !ponto fim
   `);
-
-	const moment = Moment();
-
-	console.log(moment.date());
-	console.log(moment.hour(0).toDate());
-	// console.log(moment.hour(0));
 };
 
 exports.pontoInicioMessage = async function (message) {

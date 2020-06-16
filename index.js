@@ -27,6 +27,8 @@ client.on('message', (message) => {
 
 	if (message.content === '!ponto') {
 		pontoEventMessage(message);
+
+		console.log(message.member.user);
 	}
 
 	// !ponto

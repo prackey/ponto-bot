@@ -1,0 +1,19 @@
+{
+	"name": "ponto-bot",
+	"version": "0.1.0",
+	"description": "Um bot para seu ponto",
+	"main": "index.js",
+	"repository": "https://github.com/prackey/ponto-bot.git",
+	"author": "lamecksilva <lameck2@hotmail.com>",
+	"license": "MIT",
+	"private": false,
+	"scripts": {
+		"start": "node index.js"
+	},
+	"dependencies": {
+		"bufferutil": "^4.0.1",
+		"discord.js": "^12.2.0",
+		"dotenv": "^8.2.0",
+		"utf-8-validate": "^5.0.2"
+	}
+}

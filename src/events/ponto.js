@@ -5,6 +5,7 @@ const { hhmmss } = require('../utils/dates');
 exports.pontoEventMessage = function (message) {
 	message.channel.send(`
 	Comandos disponíveis:
+!status
 !ponto inicio
 !ponto fim
 	`);
